@@ -1,89 +1,116 @@
-# IoT-Smart-Plant-Pot
-An energy-efficient, low-cost automatic watering system for plants powered by the ESP32 microcontroller. This project is designed for hobbyists and plant lovers who want a hassle-free way to take care of their plants, especially indoors.
+# 🌱 Smart Plant Pot – IoT Project
 
-👨‍💻 Team Members
-Lê Đức Anh Toàn
+> An energy-efficient, battery-powered automatic watering system for plants using the ESP32 microcontroller.
 
-Trịnh Phạm Phú Quang
+---
 
-Nguyễn Hoàng Nguyên Khải
+## 👥 Team Members
 
-📌 Project Overview
-The Smart Plant Pot monitors soil moisture in real-time and waters the plant automatically when it gets too dry. The system is powered by 4 AA batteries and designed to operate for several months without human intervention.
+- **Lê Đức Anh Toàn**
+- **Trịnh Phạm Phú Quang**
+- **Nguyễn Hoàng Nguyên Khải**
 
-Key Features:
-🌿 Auto-waters plant based on soil moisture level
+---
 
-🔋 Long battery life (6–10 months)
+## 📌 Overview
 
-⚡ Energy-efficient using ESP32's deep sleep mode
+The **Smart Plant Pot** detects soil moisture and automatically waters your plant when it's dry. Designed to be:
 
-🔧 Low maintenance and budget-friendly
+- 🔋 Low-power & battery-efficient (6–10 months)
+- 🪴 Self-sustaining with minimal user input
+- 💡 Ideal for indoor plant lovers
+- ⚙️ Built with budget-friendly, easily available components
 
-🪴 Uses Cây Rau Má in demonstration
+---
 
-🔧 Hardware Components
-Component	Description
-ESP32 Dev Board	Microcontroller that handles logic and control
-Soil Moisture Sensor	Measures soil wetness
-Relay Module	Controls the pump via GPIO
-Mini Water Pump	Waters the plant when soil is dry
-Plastic Tubing	Delivers water to the soil
-4×AA Batteries (6V)	Powers the system
+## 🔧 Hardware Components
 
-🔌 Circuit Design
-Soil moisture sensor connected to ADC pin (34) of ESP32
+| Component              | Description                                      |
+|------------------------|--------------------------------------------------|
+| `ESP32 Dev Board`      | Main microcontroller                            |
+| `Soil Moisture Sensor` | Measures moisture level in soil                 |
+| `Relay Module`         | Switches the pump on/off                        |
+| `Mini Water Pump`      | Delivers water to the plant                     |
+| `Plastic Tubing`       | Guides water from container to plant            |
+| `4 × AA Batteries`     | Powers the entire system (~6V)                  |
 
-Pump is powered via relay on GPIO pin (25)
+---
 
-ESP32 checks moisture levels every hour and triggers pump for 3 seconds if dry
+## 🔌 Circuit Diagram
 
-System then enters deep sleep mode to conserve energy
+- Moisture sensor → ADC pin **GPIO 34**
+- Pump (via Relay) → GPIO **25**
+- System wakes, reads sensor, and turns pump ON for 3s if dry
+- Then enters **deep sleep** to save power
 
-💻 Source Code
-The system is written in C++ using Arduino for ESP32. Main functionality:
+---
 
-Reads analog values from the sensor
+## 💻 Source Code
 
-Compares with dry threshold
+Written in **Arduino C++** for ESP32.
 
-Activates pump through relay if dry
+### 🔹 Core Logic:
 
-Sleeps for 1 minute (or 1 hour in alternate versions)
+```cpp
+constexpr int SENSOR_PIN = 34;
+constexpr int PUMP_PIN = 25;
+constexpr int DRY_LIMIT = 2200;
 
-📁 View full code in Plant-Pot-ESP.cpp
+void loop() {
+  int moisture = analogRead(SENSOR_PIN);
+  if (moisture > DRY_LIMIT) {
+    pump(true);
+    delay(3000);
+    pump(false);
+  }
+  delay(60000); // Wait 1 minute
+}
+```
+📂 Full code in Plant-Pot-ESP.cpp
 
-🔋 Power & Battery Life
-Powered by 4 AA batteries (~2500 mAh total)
+🔋 Power Consumption
+4× AA batteries (~2500 mAh)
 
-Estimated current draw: ~0.3 mA/hour
+Estimated draw: 0.3–0.35 mA/hour
 
-Estimated battery life: 6 to 10 months
+Features:
 
-Uses deep sleep and turns off sensor when idle
+✅ Deep Sleep Mode
 
-📈 Test Results
-Moisture sensor responds accurately to soil condition
+✅ Sensor powered only during active checks
 
-Pump waters reliably when triggered
+📈 Estimated battery life: 6–10 months
 
-Battery remains steady after days of testing
+✅ Results & Testing
+Accurate soil moisture detection
 
-Wake cycle via deep sleep works as expected
+Reliable water delivery via pump
 
-🧠 Possible Improvements
-📡 Wi-Fi integration for mobile alerts or remote monitoring
+Low battery consumption over days
 
-☀️ Solar-powered version for outdoor plants
+Wake cycles function properly
 
-🌤️ Add sensors for temperature, humidity, or light
+🚀 Potential Improvements
+📶 Add Wi-Fi (ESP32) for:
+
+Mobile moisture alerts
+
+Remote monitoring
+
+☀️ Solar-powered version
+
+🌡️ Environmental sensing: temperature, light, humidity
+
+🖼️ Presentation
+You can find our project presentation here:
+📄 IOT-Smart-Pot.pptx
 
 📎 References
-https://github.com/microsoft/IoT-For-Beginners/tree/main
+IoT for Beginners by Microsoft
 
-https://pyimagesearch.com/2021/04/12/opencv-haar-cascades/
+OpenCV Haar Cascades
 
-https://gisgeography.com/ndvi-normalized-difference-vegetation-index/
+NDVI Explanation
 
-https://forum.arduino.cc/t/connect-a-6v-battery-to-the-vin-port/1047992
+6V Battery to VIN on ESP32
 
